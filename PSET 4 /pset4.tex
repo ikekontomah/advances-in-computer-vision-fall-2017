@@ -1,0 +1,50 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[document]{ragged2e}
+ 
+\begin{document}\begin{flushleft}\newline \textbf{6.819 PSET 4}
+\newline \textbf{10/05/2017}
+\end{flushleft}
+\newline \begin{center}\textbf{ISAAC KONTOMAH}
+\end{center}
+\begin{flushleft}
+\newline \emph{Collaborators:Devin Morgan , Suman Nepal , Abishkar Chhetri ,  Khamoya Ikhofua,Afika Nyati}
+\end{flushleft}
+
+\newline \section{Convolution}
+\newline \textbf{a.}\emph{\textbf{Forward Propagation}}
+\newline $x_{out}[i]=f_{n}(x_{in})$
+\newline $$x_{out}=\sum_{j=0}^{k-1}x_{in}[i-\frac{k-1}{2}+j]W[j] $$
+\newline Where $i$ is specific index of $x_{in}$ where convolution is being done and $j$ ranges from $0$ to $k-1$
+\newline \textbf{b.} \emph{\textbf{Gradients of Input and Update Rules}}
+\newline $W^{(i+1)=W^{i}+\eta\frac{\partial C}{\partial W}$
+\newline $\frac{\partial C}{\partial X_{in1}}=\frac{\partial C}{\partial X_{out1}}\frac{\partial X_{out1}}{\partial X_{in1}}+......+\frac{\partial C}{\partial X_{outN}}\frac{\partial X_{outN}}{\partial X_{in1}}$
+\newline $\frac{\partial X_{outi}}{\partial X_{inj}}=\frac{\partial}{\partial x_{in}[i]}(x_{in}[i-\frac{k-1}{2}+1]W[1]+x_{in}[i-\frac{k-1}{2}+2]W[2]+....+x_{in}[i-\frac{k-1}{2}+g]w[g] ), g=[0,k-1]$
+\newline $=\frac{\partial}{\partial x_{in}[i]}(x_{in}[i-\frac{k-1}{2}+g]W[\frac{k-1}{2}]) , i=i+g-\frac{k-1}{2},$ hence $g=\frac{k-1}{2}$
+\newline $=\frac{\partial}{\partial x_{in}[i]}(x_{in}[i-\frac{k-1}{2}-(i-j)]W[\frac{k-1}{2}]) $
+\newline $=\frac{\partial}{\partial x_{in}[i]}(x_{in}[i-\frac{k-1}{2}+j]W[\frac{k-1}{2}]) =W[\frac{k-1}{2}]$
+
+\newline $$\frac{\partial C }{\partial x_{in}[j]}=\sum_{i=0}^{N-1}\frac{\partial C }{\partial x_{out}[i]}\frac{\partial x_{out}[i]}{\partial x_{in}[j]}=\sum_{i=0}^{N-1}\frac{\partial C }{\partial x_{out}[i-\frac{k-1}{2}+j]}W[\frac{k-1}{2}]$$
+\newline Hence $$\frac{\partial C }{\partial x_{in}[j]}=\sum_{i=0}^{N-1}\frac{\partial C }{\partial x_{out}[i-\frac{k-1}{2}+j]}W[\frac{k-1}{2}]$$
+
+\newline $$\frac{\partial C }{\partial W[j]}=\sum_{i=0}^{k-1}\frac{\partial C }{\partial x_{out}[i]}\frac{\partial X_{out}[i]}{\partial W[j]} , j $$ specific point where we compute gradient
+\newline $=\frac{\partial}{\partial W[j]}(x_{in}[i-\frac{k-1}{2}+1]W[1]+x_{in}[i-\frac{k-1}{2}+2]W[2]+....+x_{in}[i-\frac{k-1}{2}+g]w[g] ,g=[0,k])$
+\newline $$=\sum_{i=0}^{k-1}\frac{\partial}{\partial w[j] }(x_{in}[i-\frac{k-1}{2}+j]W[j])=x_{in}[i-\frac{k-1}{2}+j]$$
+\newline $$\frac{\partial C }{\partial W[j]}=\sum_{i=0}^{k-1}\frac{\partial C }{\partial x_{out}[i]}x_{in}[i-\frac{k-1}{2}+j]$$
+\newline Hence $$W^{(i+1)}=W^{(i)}+\eta\sum_{i=0}^{k-1}\frac{\partial C }{\partial x_{out}[i]}x_{in}[i-\frac{k-1}{2}+j]$$
+%\newline $\frac{\partial x_{out}}{\partial x_{in}}=\left[ {\begin{array}{ccccc}
+   %\frac{\partial x_{out}[1]}{\partial x_{in}[1]}& \frac{\partial x_{out}[1]}{\partial %x_{in}[2]}& ... &...&\frac{\partial x_{out}[1]}{\partial x_{in}[n]}\\
+ %  ...& &  & &...\\
+%  ...&... &  &  &...\\
+  %  ...& & ...& &... \\
+  %   ...& & &... &...\\
+   %   \frac{\partial x_{out}[1]}{\partial x_{in}[n]}%& ...&... &... &\frac{\partial x_{out}%[n]}{\partial %x_{in}[n]} \\
+  %\end{array} } \right]$ 
+\newline \textbf{c.} \emph{\textbf{Handling Boundaries}}
+\newline Since the kernel is being slid across the image, it is likely to go out of bounds.Hence, zero pad the kernel when out of range to take care of out of bounds error for $j \not\in [1-\frac{k-1}{2},i+\frac{k-1}{2}]$
+
+\end{document}
